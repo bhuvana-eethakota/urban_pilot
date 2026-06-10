@@ -1,0 +1,197 @@
+[
+  {
+    "timestamp": "2026-04-04 08:26",
+    "population": 2000000,
+    "budget": 850,
+    "priority": "traffic",
+    "summary": "UrbanPilot designed complete city for 2,000,000 residents \u2014 5 zones, 4 hospitals, 100 schools, 3 flyovers, 8 parks, 100,000 housing units, IT park across Rs 850Cr and 36 months.",
+    "kpis": [
+      {
+        "kpi": "Traffic",
+        "target": "-40%",
+        "by": "Month 6"
+      },
+      {
+        "kpi": "AQI",
+        "target": "156 to below 100",
+        "by": "Month 18"
+      },
+      {
+        "kpi": "Transport",
+        "target": "34% to 78%",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Green space",
+        "target": "4.2 to 9.2 sqm",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Housing",
+        "target": "100,000 units",
+        "by": "Month 36"
+      },
+      {
+        "kpi": "Annual savings",
+        "target": "Rs 170Cr/yr",
+        "by": "Month 36"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04 08:26",
+    "population": 2000000,
+    "budget": 850,
+    "priority": "traffic",
+    "summary": "UrbanPilot designed complete city for 2,000,000 residents \u2014 5 zones, 4 hospitals, 100 schools, 3 flyovers, 8 parks, 100,000 housing units, IT park across Rs 850Cr and 36 months.",
+    "kpis": [
+      {
+        "kpi": "Traffic",
+        "target": "-40%",
+        "by": "Month 6"
+      },
+      {
+        "kpi": "AQI",
+        "target": "156 to below 100",
+        "by": "Month 18"
+      },
+      {
+        "kpi": "Transport",
+        "target": "34% to 78%",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Green space",
+        "target": "4.2 to 9.2 sqm",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Housing",
+        "target": "100,000 units",
+        "by": "Month 36"
+      },
+      {
+        "kpi": "Annual savings",
+        "target": "Rs 170Cr/yr",
+        "by": "Month 36"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04 08:36",
+    "population": 2000000,
+    "budget": 850,
+    "priority": "traffic",
+    "summary": "UrbanPilot designed complete city for 2,000,000 residents \u2014 5 zones, 4 hospitals, 100 schools, 3 flyovers, 8 parks, 100,000 housing units, IT park across Rs 850Cr and 36 months.",
+    "kpis": [
+      {
+        "kpi": "Traffic",
+        "target": "-40%",
+        "by": "Month 6"
+      },
+      {
+        "kpi": "AQI",
+        "target": "156 to below 100",
+        "by": "Month 18"
+      },
+      {
+        "kpi": "Transport",
+        "target": "34% to 78%",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Green space",
+        "target": "4.2 to 9.2 sqm",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Housing",
+        "target": "100,000 units",
+        "by": "Month 36"
+      },
+      {
+        "kpi": "Annual savings",
+        "target": "Rs 170Cr/yr",
+        "by": "Month 36"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04 08:36",
+    "population": 2000000,
+    "budget": 850,
+    "priority": "traffic",
+    "summary": "UrbanPilot designed complete city for 2,000,000 residents \u2014 5 zones, 4 hospitals, 100 schools, 3 flyovers, 8 parks, 100,000 housing units, IT park across Rs 850Cr and 36 months.",
+    "kpis": [
+      {
+        "kpi": "Traffic",
+        "target": "-40%",
+        "by": "Month 6"
+      },
+      {
+        "kpi": "AQI",
+        "target": "156 to below 100",
+        "by": "Month 18"
+      },
+      {
+        "kpi": "Transport",
+        "target": "34% to 78%",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Green space",
+        "target": "4.2 to 9.2 sqm",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Housing",
+        "target": "100,000 units",
+        "by": "Month 36"
+      },
+      {
+        "kpi": "Annual savings",
+        "target": "Rs 170Cr/yr",
+        "by": "Month 36"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04 09:09",
+    "population": 2000000,
+    "budget": 850,
+    "priority": "traffic",
+    "summary": "UrbanPilot designed complete city for 2,000,000 residents \u2014 5 zones, 4 hospitals, 100 schools, 3 flyovers, 8 parks, 100,000 housing units, IT park across Rs 850Cr and 36 months.",
+    "kpis": [
+      {
+        "kpi": "Traffic",
+        "target": "-40%",
+        "by": "Month 6"
+      },
+      {
+        "kpi": "AQI",
+        "target": "156 to below 100",
+        "by": "Month 18"
+      },
+      {
+        "kpi": "Transport",
+        "target": "34% to 78%",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Green space",
+        "target": "4.2 to 9.2 sqm",
+        "by": "Month 24"
+      },
+      {
+        "kpi": "Housing",
+        "target": "100,000 units",
+        "by": "Month 36"
+      },
+      {
+        "kpi": "Annual savings",
+        "target": "Rs 170Cr/yr",
+        "by": "Month 36"
+      }
+    ]
+  }
+]

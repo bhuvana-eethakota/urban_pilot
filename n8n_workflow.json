@@ -1,0 +1,246 @@
+{
+  "name": "UrbanPilot — Agentic AI Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "urbanpilot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "urbanpilot-trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nreturn [{\n  json: {\n    population: parseInt(body.population || 2000000),\n    budget: parseInt(body.budget || 850),\n    priority: body.priority || 'traffic',\n    area_type: body.area_type || 'mixed',\n    lat: parseFloat(body.lat || 17.3850),\n    lng: parseFloat(body.lng || 78.4867),\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "node-prepare",
+      "name": "Prepare Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/data",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-data-agent",
+      "name": "Agent 1 — Data Analyst",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input  = $('Prepare Input').first().json;\nconst dataOut = $input.first().json.result || {};\nreturn [{\n  json: {\n    ...input,\n    context: { data_analyst: dataOut },\n    data_analyst_output: dataOut,\n    step: 1,\n    log: `Data Analyst complete: ${dataOut.critical_problems?.length || 0} problems found`\n  }\n}];"
+      },
+      "id": "node-merge1",
+      "name": "Merge — After Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/planning",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-planning-agent",
+      "name": "Agent 2 — Planning Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Merge — After Data').first().json;\nconst planOut = $input.first().json.result || {};\nreturn [{\n  json: {\n    ...prev,\n    context: { ...prev.context, planning: planOut },\n    planning_output: planOut,\n    step: 2\n  }\n}];"
+      },
+      "id": "node-merge2",
+      "name": "Merge — After Planning",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/traffic",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-traffic-agent",
+      "name": "Agent 3 — Traffic Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/environment",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-env-agent",
+      "name": "Agent 4 — Environment Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 480]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev    = $('Merge — After Planning').first().json;\nconst traffic = $('Agent 3 — Traffic Agent').first().json.result || {};\nconst env     = $('Agent 4 — Environment Agent').first().json.result || {};\nreturn [{\n  json: {\n    ...prev,\n    context: { ...prev.context, traffic, environment: env },\n    step: 4\n  }\n}];"
+      },
+      "id": "node-merge3",
+      "name": "Merge — Traffic + Env",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 380]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/budget",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-budget-agent",
+      "name": "Agent 5 — Budget Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [{
+            "value1": "={{ $json.result?.feedback_flag }}",
+            "value2": true
+          }]
+        }
+      },
+      "id": "node-budget-check",
+      "name": "Budget OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2220, 380]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/planning",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({...$('Merge — Traffic + Env').first().json, revision: 1}) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-revise",
+      "name": "Revise Plan (Feedback Loop)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2440, 260]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Merge — Traffic + Env').first().json;\nconst budgetOut = $('Agent 5 — Budget Agent').first().json.result || {};\nreturn [{\n  json: {\n    ...prev,\n    context: { ...prev.context, budget: budgetOut },\n    step: 5,\n    budget_ok: !budgetOut.feedback_flag\n  }\n}];"
+      },
+      "id": "node-merge4",
+      "name": "Merge — After Budget",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 480]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/agents/decision",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"response": {"response": {"neverError": true}}}
+      },
+      "id": "node-decision-agent",
+      "name": "Agent 6 — Decision Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2660, 380]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input    = $('Prepare Input').first().json;\nconst decision = $input.first().json.result || {};\nconst budget   = $('Merge — After Budget').first().json.context?.budget || {};\n\nconst report = {\n  status: 'success',\n  timestamp: new Date().toISOString(),\n  city: {\n    population: input.population,\n    budget_crore: input.budget,\n    priority: input.priority\n  },\n  summary: decision.executive_summary || '',\n  top_5_actions: decision.top_5_actions || [],\n  complete_city_plan: decision.complete_city_plan || {},\n  kpis: decision.kpis || [],\n  impact: decision.impact || {},\n  roadmap: decision.['36_month_roadmap'] || {},\n  financial: {\n    roi: budget.returns?.roi || '2.8x',\n    annual_savings: budget.returns?.annual_savings,\n    payback: budget.returns?.payback_yrs,\n    funding: 'Smart Cities Mission 47% + State 30% + PPP 23%'\n  },\n  pitch: decision.pitch || '',\n  agents_completed: 6\n};\n\nreturn [{ json: report }];"
+      },
+      "id": "node-build-report",
+      "name": "Build Final Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2880, 380]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}"
+      },
+      "id": "node-respond",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [3100, 380]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger":            {"main": [[{"node": "Prepare Input",             "type": "main", "index": 0}]]},
+    "Prepare Input":              {"main": [[{"node": "Agent 1 — Data Analyst",    "type": "main", "index": 0}]]},
+    "Agent 1 — Data Analyst":    {"main": [[{"node": "Merge — After Data",         "type": "main", "index": 0}]]},
+    "Merge — After Data":         {"main": [[{"node": "Agent 2 — Planning Agent",  "type": "main", "index": 0}]]},
+    "Agent 2 — Planning Agent":  {"main": [[{"node": "Merge — After Planning",     "type": "main", "index": 0}]]},
+    "Merge — After Planning":     {"main": [[{"node": "Agent 3 — Traffic Agent",   "type": "main", "index": 0},
+                                             {"node": "Agent 4 — Environment Agent","type":"main","index":0}]]},
+    "Agent 3 — Traffic Agent":   {"main": [[{"node": "Merge — Traffic + Env",      "type": "main", "index": 0}]]},
+    "Agent 4 — Environment Agent":{"main":[[{"node": "Merge — Traffic + Env",      "type": "main", "index": 1}]]},
+    "Merge — Traffic + Env":      {"main": [[{"node": "Agent 5 — Budget Agent",    "type": "main", "index": 0}]]},
+    "Agent 5 — Budget Agent":    {"main": [[{"node": "Budget OK?",                 "type": "main", "index": 0}]]},
+    "Budget OK?":                 {"main": [
+      [{"node": "Revise Plan (Feedback Loop)", "type": "main", "index": 0}],
+      [{"node": "Merge — After Budget",        "type": "main", "index": 0}]
+    ]},
+    "Revise Plan (Feedback Loop)":{"main":[[{"node": "Merge — After Budget",       "type": "main", "index": 0}]]},
+    "Merge — After Budget":       {"main": [[{"node": "Agent 6 — Decision Agent",  "type": "main", "index": 0}]]},
+    "Agent 6 — Decision Agent":  {"main": [[{"node": "Build Final Report",         "type": "main", "index": 0}]]},
+    "Build Final Report":         {"main": [[{"node": "Send Response",             "type": "main", "index": 0}]]}
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "description": "UrbanPilot — 6 Agent Agentic AI Urban Planning System. Trigger via POST to /webhook/urbanpilot with { population, budget, priority, area_type }. Each HTTP node calls individual UrbanPilot Flask API endpoints. Budget feedback loop: if budget too low, Planning Agent automatically re-runs with revision flag."
+  }
+}

@@ -1,0 +1,6 @@
+groq
+flask
+flask-cors
+python-dotenv
+numpy
+faiss-cpu
